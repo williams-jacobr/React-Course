@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Input from "./components/InputForm/Input";
+import Modal from "./components/UI/Modal/Modal";
+import Overlay from "./components/UI/Overlay/Overlay";
 import Users from "./components/Users/Users";
 
 function App() {
@@ -12,6 +14,11 @@ function App() {
     <div>
       <Input onAddUser={addUserHandler} />
       <Users users={users} />
+      <Overlay>
+        <Modal>
+          <p>Hello</p>
+        </Modal>
+      </Overlay>
     </div>
   );
 }
