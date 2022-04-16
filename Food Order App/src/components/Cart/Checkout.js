@@ -1,9 +1,11 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
+
+import useInput from "../../hooks/use-input";
 
 import classes from "./Checkout.module.css";
 
-const isEmpty = (value) => value.trim() === "";
-const isNotSixChars = (value) => value.trim().split(" ").join("").length !== 6;
+const isNotEmpty = (value) => value.trim() !== "";
+const isSixChars = (value) => value.trim().split(" ").join("").length === 6;
 
 const Checkout = function (props) {
   const [formInputValidity, setFormInputValidity] = useState({
@@ -13,42 +15,65 @@ const Checkout = function (props) {
     postcode: true,
   });
 
-  const nameInputRef = useRef();
-  const streetInputRef = useRef();
-  const cityInputRef = useRef();
-  const postcodeInputRef = useRef();
+  const {
+    value: name,
+    valueIsValid: nameIsValid,
+    hasError: nameHasError,
+    valueChangeHandler: nameChangeHandler,
+    blurChangeHandler: nameBlurHandler,
+    reset: nameReset,
+  } = useInput(isNotEmpty);
+
+  const {
+    value: street,
+    valueIsValid: streetIsValid,
+    hasError: streetHasError,
+    valueChangeHandler: streetChangeHandler,
+    blurChangeHandler: streetBlurHandler,
+    reset: streetReset,
+  } = useInput(isNotEmpty);
+
+  const {
+    value: city,
+    valueIsValid: cityIsValid,
+    hasError: cityHasError,
+    valueChangeHandler: cityChangeHandler,
+    blurChangeHandler: cityBlurHandler,
+    reset: cityReset,
+  } = useInput(isNotEmpty);
+
+  const {
+    value: postcode,
+    valueIsValid: postcodeIsValid,
+    hasError: postcodeHasError,
+    valueChangeHandler: postcodeChangeHandler,
+    blurChangeHandler: postcodeBlurHandler,
+    reset: postcodeReset,
+  } = useInput(isSixChars);
 
   const confirmHandler = function (event) {
     event.preventDefault();
 
-    const enteredName = nameInputRef.current.value;
-    const enteredStreet = streetInputRef.current.value;
-    const enteredCity = cityInputRef.current.value;
-    const enteredPostcode = postcodeInputRef.current.value;
-
-    const enteredNameIsValid = !isEmpty(enteredName);
-    const enteredStreetIsValid = !isEmpty(enteredStreet);
-    const enteredCityIsValid = !isEmpty(enteredCity);
-    const enteredPostcodeIsValid = !isNotSixChars(enteredPostcode);
-
     setFormInputValidity({
-      name: enteredNameIsValid,
-      street: enteredStreetIsValid,
-      city: enteredCityIsValid,
-      postcode: enteredPostcodeIsValid,
+      name: nameIsValid,
+      street: streetIsValid,
+      city: cityIsValid,
+      postcode: postcodeIsValid,
     });
 
     const formIsValid =
-      enteredNameIsValid &&
-      enteredStreetIsValid &&
-      enteredCityIsValid &&
-      enteredPostcodeIsValid;
+      nameIsValid && streetIsValid && cityIsValid && postcodeIsValid;
 
     if (!formIsValid) {
       return;
     }
 
     // Submit cart data
+
+    nameReset();
+    streetReset();
+    cityReset();
+    postcodeReset();
   };
 
   return (
@@ -59,8 +84,14 @@ const Checkout = function (props) {
         }`}
       >
         <label htmlFor="name">Your Name</label>
-        <input type="text" id="name" ref={nameInputRef} />
-        {!formInputValidity.name && <p>Please enter a valid name</p>}
+        <input
+          type="text"
+          id="name"
+          onChange={nameChangeHandler}
+          onBlur={nameBlurHandler}
+          value={name}
+        />
+        {nameHasError && <p>Please enter a valid name</p>}
       </div>
       <div
         className={`${classes.control} ${
@@ -68,8 +99,14 @@ const Checkout = function (props) {
         }`}
       >
         <label htmlFor="street">House Number and Street</label>
-        <input type="text" id="street" ref={streetInputRef} />
-        {!formInputValidity.street && <p>Please enter a valid address</p>}
+        <input
+          type="text"
+          id="street"
+          onChange={streetChangeHandler}
+          onBlur={streetBlurHandler}
+          value={street}
+        />
+        {streetHasError && <p>Please enter a valid address</p>}
       </div>
       <div
         className={`${classes.control} ${
@@ -77,8 +114,14 @@ const Checkout = function (props) {
         }`}
       >
         <label htmlFor="city">City</label>
-        <input type="text" id="city" ref={cityInputRef} />
-        {!formInputValidity.city && <p>Please enter a valid city name</p>}
+        <input
+          type="text"
+          id="city"
+          onChange={cityChangeHandler}
+          onBlur={cityBlurHandler}
+          value={city}
+        />
+        {cityHasError && <p>Please enter a valid city name</p>}
       </div>
       <div
         className={`${classes.control} ${
@@ -86,8 +129,14 @@ const Checkout = function (props) {
         }`}
       >
         <label htmlFor="postcode">Postcode</label>
-        <input type="text" id="postcode" ref={postcodeInputRef} />
-        {!formInputValidity.postcode && <p>Please enter a valid postcode</p>}
+        <input
+          type="text"
+          id="postcode"
+          onChange={postcodeChangeHandler}
+          onBlur={postcodeBlurHandler}
+          value={postcode}
+        />
+        {postcodeHasError && <p>Please enter a valid postcode</p>}
       </div>
       <div className={classes.actions}>
         <button type="button" onClick={props.onCancel}>
