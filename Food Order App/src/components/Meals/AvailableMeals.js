@@ -23,17 +23,17 @@ const AvailableMeals = function () {
 
   const {
     isLoading,
-    httpError,
+    error: httpError,
     sendRequest: sendMealRequest,
-  } = useHttp(
-    {
-      url: "https://react-http-bf455-default-rtdb.europe-west1.firebasedatabase.app/meals.json",
-    },
-    getMeals
-  );
+  } = useHttp();
 
   useEffect(() => {
-    sendMealRequest();
+    sendMealRequest(
+      {
+        url: "https://react-http-bf455-default-rtdb.europe-west1.firebasedatabase.app/meals.json",
+      },
+      getMeals
+    );
   }, [sendMealRequest]);
 
   const mealsList = meals.map((meal) => (

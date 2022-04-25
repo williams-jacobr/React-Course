@@ -68,7 +68,7 @@ const Checkout = function (props) {
       return;
     }
 
-    // Submit cart data
+    props.onConfirm({ name, street, city, postcode });
 
     nameReset();
     streetReset();
