@@ -1,6 +1,10 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 
-const intialCartState = { show: false, items: [] };
+const intialCartState = {
+  show: false,
+  items: [],
+  totalQuantity: 0,
+};
 
 const cartSlice = createSlice({
   name: "cart",
@@ -13,30 +17,37 @@ const cartSlice = createSlice({
       state.show = true;
     },
     addItem(state, action) {
-      const itemIndex = state.items.findIndex(
-        (item) => item.id === action.payload.id
-      );
+      const newItem = action.payload;
 
-      console.log(action.payload);
-      console.log(state.items);
+      const exisitingItem = state.items.find((item) => item.id === newItem.id);
 
-      if (itemIndex >= 0) {
-        state.items[
-          state.items.map((item) => item.id).indexOf(action.payload.id)
-        ].total++;
-      }
+      state.totalQuantity++;
 
-      if (itemIndex < 0) {
-        state.items.push({ ...action.payload, total: 1 });
+      if (!exisitingItem) {
+        state.items.push({
+          id: newItem.id,
+          price: newItem.price,
+          quantity: 1,
+          totalPrice: newItem.price,
+          name: newItem.title,
+        });
+      } else {
+        exisitingItem.quantity++;
+        exisitingItem.totalPrice = exisitingItem.totalPrice + newItem.price;
       }
     },
-    increment(state, action) {
-      state.items[state.items.map((item) => item.id).indexOf(action.payload.id)]
-        .total++;
-    },
-    decrement(state, action) {
-      state.items[state.items.map((item) => item.id).indexOf(action.payload.id)]
-        .total--;
+    removeItem(state, action) {
+      const id = action.payload;
+      const exisitingItem = state.items.find((item) => item.id === id);
+      state.totalQuantity--;
+
+      if (exisitingItem.quantity === 1) {
+        state.items = state.items.filter((item) => item.id !== id);
+      } else {
+        exisitingItem.quantity--;
+        exisitingItem.totalPrice =
+          exisitingItem.totalPrice - exisitingItem.price;
+      }
     },
   },
 });

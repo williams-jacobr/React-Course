@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { cartActions } from "../../store/index";
 
@@ -13,7 +13,7 @@ const ProductItem = (props) => {
   const addItemHandler = () => {
     dispatch(cartActions.show());
 
-    dispatch(cartActions.addItem({title, price, id}))
+    dispatch(cartActions.addItem({ title, price, id }));
   };
 
   return (
