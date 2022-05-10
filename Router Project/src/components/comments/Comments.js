@@ -9,11 +9,6 @@ import useHttp from "../../hooks/use-http";
 import { getAllComments } from "../../lib/api";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
-const DUMMY_COMMENTS = [
-  { id: "c1", text: "Test" },
-  { id: "c2", text: "Another comment!" },
-];
-
 const Comments = () => {
   const [isAddingComment, setIsAddingComment] = useState(false);
 
