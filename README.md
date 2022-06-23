@@ -1,4 +1,4 @@
-<img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+<img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" style="width:100px"/>
 
 A series of projects and tasks that build on one another to learn the core and more advanced concepts of ReactJS.
 
